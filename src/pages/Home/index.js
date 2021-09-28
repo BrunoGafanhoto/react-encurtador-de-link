@@ -2,7 +2,7 @@ import React , { useState }from 'react'
 
 import { LinearGradient } from 'expo-linear-gradient'
 import { Feather } from "@expo/vector-icons"
-import { TouchableWithoutFeedback, Keyboard , KeyboardAvoidingView, Platform } from 'react-native'
+import { TouchableWithoutFeedback, Keyboard , KeyboardAvoidingView, Platform, Modal } from 'react-native'
 
 // components
 import StatusBarPage from '../../components/StatusBarPage'
@@ -13,9 +13,18 @@ import {
  BoxIcon, Input, ButtonLink, ButtonLinkText
 
 } from './styles'
+import ModalLink from '../../components/ModalLink'
 
 const Home = () => {
      const [input, setInput] = useState('')
+
+     const [modalVisible, setModalVisible] = useState(false);
+
+     const handleShortLink = () =>{
+          setModalVisible(true);
+     }
+
+
      return(
           <TouchableWithoutFeedback onPress={ () => Keyboard.dismiss()}>   
                <LinearGradient
@@ -48,7 +57,19 @@ const Home = () => {
                               />
                          </ContainerInput>
 
-                         <ButtonLink onPress={() => alert(input)}>
+                         <ButtonLink onPress={handleShortLink}>
                               <ButtonLinkText>Gerar Link</ButtonLinkText>
                          </ButtonLink>
+                    </ContainerContent>
+                                             
+               </KeyboardAvoidingView>
+                    <Modal visible={modalVisible} transparent animationType="slide">
+                         <ModalLink onClose={() => setModalVisible(false)} />
+                    </Modal>
+               </LinearGradient>
           
+          </TouchableWithoutFeedback>
+     )
+}
+
+export default Home

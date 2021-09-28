@@ -38,6 +38,7 @@ const Routes = () =>{
                }}/>
                <Drawer.Screen name="MyLinks" component={MyLinks}
                     options={{
+                         headerShown:false,
                          title: 'Meus Links',
                          drawerIcon:({focused, size, color}) => (
                               <Ionicons name={focused ? 'stats-chart' : 'stats-chart-outline'} size={size} color={color} />
