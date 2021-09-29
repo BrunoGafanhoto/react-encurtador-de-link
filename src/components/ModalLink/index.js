@@ -10,17 +10,17 @@ import {
 import { View, Text, TouchableOpacity, TouchableWithoutFeedback,Clipboard, Share } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-const ModalLink = ({ onClose }) => {
-     
+const ModalLink = ({ onClose, response }) => {
+    
      const copyLink = () =>{
-          Clipboard.setString('teste');
-          alert('Link cpiado com sucesso!');
+          Clipboard.setString(response.link);
+          alert('Link copiado com sucesso!');
      }
 
      const handleShare = async() => {
           try{
                const result = await Share.share({
-                    message: `Link: https:seulink.com`
+                    message: `${response.link}`
                })
 
                if(result.action === Share.sharedAction){
@@ -54,12 +54,15 @@ const ModalLink = ({ onClose }) => {
 
                     <LinkArea>
                          <Title>Link encurtado</Title>
-                         <LongUrl numberOfLines={1}>https://ftenergia.com.br</LongUrl>
+                         <LongUrl numberOfLines={1}>
+                              {response.long_url}
+                         </LongUrl>
 
                     <ShortLinkArea activeOpacity={1}>
                          <ShortLinkUrl numberOfLines={1}
                          onPress={copyLink}>
-                              https://bit.ly/aoskdkoas
+                              {response.link}
+                              
                          </ShortLinkUrl>
 
                          <TouchableOpacity onPress={copyLink}>

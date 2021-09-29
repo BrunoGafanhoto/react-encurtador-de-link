@@ -15,6 +15,6 @@ export const Title = styled.Text`
 `;
 
 export const ListLinks = styled.FlatList`
-     margin-left: 20px;
+     /* padding-left: 20px; */
 `;
 

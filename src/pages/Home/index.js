@@ -2,7 +2,7 @@ import React , { useState }from 'react'
 
 import { LinearGradient } from 'expo-linear-gradient'
 import { Feather } from "@expo/vector-icons"
-import { TouchableWithoutFeedback, Keyboard , KeyboardAvoidingView, Platform, Modal } from 'react-native'
+import { TouchableWithoutFeedback, Keyboard , KeyboardAvoidingView, Platform, Modal, ActivityIndicator } from 'react-native'
 
 // components
 import StatusBarPage from '../../components/StatusBarPage'
@@ -15,13 +15,41 @@ import {
 } from './styles'
 import ModalLink from '../../components/ModalLink'
 
+// Import api
+import api from '../../services/api';
+
 const Home = () => {
+
+     const [loading, setLoading] = useState(false);
+
      const [input, setInput] = useState('')
 
      const [modalVisible, setModalVisible] = useState(false);
 
-     const handleShortLink = () =>{
-          setModalVisible(true);
+     const [data, setData] = useState({});
+
+     const handleShortLink = async() =>{
+          setLoading(true);
+          try{
+               const response = await api.post('/shorten',
+               {
+                    long_url: input
+               })
+
+               const shortLink = response.data.link
+               setModalVisible(true)
+               setData(response.data)
+               setLoading(false)
+               setInput('')
+               Keyboard.dismiss()
+               
+          }catch(err){
+               alert('Ops parece que algo deu errado.')
+               setInput('');
+               Keyboard.dismiss();
+               setLoading(false);
+          }
+
      }
 
 
@@ -58,13 +86,19 @@ const Home = () => {
                          </ContainerInput>
 
                          <ButtonLink onPress={handleShortLink}>
-                              <ButtonLinkText>Gerar Link</ButtonLinkText>
+                              {
+                                   loading ? (
+                                        <ActivityIndicator color="#121212" size={24} />
+                                   ) : (
+                                        <ButtonLinkText>Gerar Link</ButtonLinkText>
+                                   )
+                              }
                          </ButtonLink>
                     </ContainerContent>
                                              
                </KeyboardAvoidingView>
                     <Modal visible={modalVisible} transparent animationType="slide">
-                         <ModalLink onClose={() => setModalVisible(false)} />
+                         <ModalLink onClose={() => setModalVisible(false)} response={data} />
                     </Modal>
                </LinearGradient>
           
